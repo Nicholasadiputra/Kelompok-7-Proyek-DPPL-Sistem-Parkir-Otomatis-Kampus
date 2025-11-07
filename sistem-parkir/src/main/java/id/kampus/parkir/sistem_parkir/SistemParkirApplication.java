@@ -8,6 +8,7 @@ public class SistemParkirApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SistemParkirApplication.class, args);
+		
 	}
 
 }
