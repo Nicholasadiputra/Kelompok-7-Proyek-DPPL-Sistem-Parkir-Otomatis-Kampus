@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Sistem Parkir Kampus</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-title">Parkir Kampus</div>
+        <nav>
+            <a th:href="@{/}" class="nav-item active">Dashboard</a>
+            <a th:href="@{/pengguna}" class="nav-item">Pengguna</a>
+            <a th:href="@{/kendaraan}" class="nav-item">Kendaraan</a>
+        </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+        <header class="header">
+            <h1>Dashboard</h1>
+        </header>
+
+        <!-- Cards -->
+        <section class="cards">
+            <div class="card">
+                <span class="card-label">Total Pengguna</span>
+                <span class="card-value" th:text="${ringkasan.totalPengguna}">0</span>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Total Kendaraan</span>
+                <span class="card-value" th:text="${ringkasan.totalKendaraan}">0</span>
+            </div>
+
+            <div class="card">
+                <span class="card-label">Slot Tersedia</span>
+                <span class="card-value" th:text="${ringkasan.slotKosong}">0</span>
+            </div>
+        </section>
+
+        <!-- Simple info / placeholder -->
+        <section class="panel">
+            <h2>Ringkasan Sistem</h2>
+            <p>
+                Sistem parkir otomatis kampus menampilkan data pengguna, kendaraan terdaftar,
+                dan ketersediaan slot parkir secara real-time berdasarkan data di database.
+            </p>
+        </section>
+    </main>
+</div>
+</body>
+</html>

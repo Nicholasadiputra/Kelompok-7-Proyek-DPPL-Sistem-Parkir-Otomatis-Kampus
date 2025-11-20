@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Kendaraan - Sistem Parkir Kampus</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-title">Parkir Kampus</div>
+        <nav>
+            <a th:href="@{/}" class="nav-item">Dashboard</a>
+            <a th:href="@{/pengguna}" class="nav-item">Pengguna</a>
+            <a th:href="@{/kendaraan}" class="nav-item active">Kendaraan</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <header class="header">
+            <h1>Data Kendaraan</h1>
+        </header>
+
+        <section class="panel">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Plat Nomor</th>
+                    <th>Status</th>
+                    <th>Pemilik</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="k : ${kendaraanList}">
+                    <td th:text="${k.id}">1</td>
+                    <td th:text="${k.platNomor}">BM 1234 AA</td>
+                    <td th:text="${k.statusAktif} ? 'Aktif' : 'Non-aktif'">Aktif</td>
+                    <td th:text="${k.pengguna != null ? k.pengguna.nama : '-'}">Niko</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+</body>
+</html>
