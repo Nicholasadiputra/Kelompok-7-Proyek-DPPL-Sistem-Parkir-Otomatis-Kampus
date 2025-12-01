@@ -3,51 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Kendaraan</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
 
+<body>
 <div class="layout">
 
-    <!-- Sidebar -->
+    <!-- SIDEBAR -->
     <div class="sidebar">
         <div class="sidebar-title">Parkir Kampus</div>
 
-        <a href="/" class="nav-item">Dashboard</a>
-        <a href="/pengguna" class="nav-item">Pengguna</a>
-        <a href="/kendaraan" class="nav-item active">Kendaraan</a>
+        <a class="nav-item" th:href="@{/}">Dashboard</a>
+        <a class="nav-item" th:href="@{/pengguna}">Pengguna</a>
+        <a class="nav-item active" th:href="@{/kendaraan}">Kendaraan</a>
     </div>
 
-    <!-- Main -->
+    <!-- MAIN CONTENT -->
     <div class="main">
 
         <div class="header">
             <h1>Data Kendaraan</h1>
         </div>
 
-        <button class="btn" onclick="openModal()">Tambah Kendaraan</button>
+        <button class="btn" onclick="openAddModal()">Tambah Kendaraan</button>
 
         <div class="panel">
             <table class="table">
                 <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Plat Nomor</th>
-                        <th>Status</th>
-                        <th>Pemilik</th>
-                        <th>Aksi</th>
-                    </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Plat Nomor</th>
+                    <th>Status</th>
+                    <th>Pemilik</th>
+                    <th>Aksi</th>
+                </tr>
                 </thead>
+
                 <tbody>
-                    <tr th:each="k : ${kendaraanList}">
-                        <td th:text="${k.id}"></td>
-                        <td th:text="${k.platNomor}"></td>
-                        <td th:text="${k.statusAktif} ? 'Aktif' : 'Nonaktif'"></td>
-                        <td th:text="${k.pengguna.nama}"></td>
-                        <td>
-                            <a th:href="@{|/kendaraan/hapus/${k.id}|}" class="btn-delete">Hapus</a>
-                        </td>
-                    </tr>
+                <tr th:each="k : ${kendaraanList}">
+                    <td th:text="${k.id}"></td>
+                    <td th:text="${k.platNomor}"></td>
+                    <td th:text="${k.statusAktif} ? 'Aktif' : 'Nonaktif'"></td>
+                    <td th:text="${k.pengguna != null ? k.pengguna.nama : '-'}"></td>
+
+                    <td>
+                        <!-- BUTTON EDIT -->
+                        <button class="btn"
+                                th:attr="onclick=|openEditModal(${k.id}, '${#strings.escapeJavaScript(k.platNomor)}', ${k.pengguna != null ? k.pengguna.id : 0})|">
+                            Edit
+                        </button>
+
+                        <!-- BUTTON DELETE -->
+                        <a class="btn-delete"
+                           th:href="@{'/kendaraan/hapus/' + ${k.id}}"
+                           onclick="return confirm('Yakin ingin menghapus kendaraan ini?');">
+                            Hapus
+                        </a>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
@@ -55,38 +68,79 @@
     </div>
 </div>
 
-<!-- Modal Tambah -->
-<div id="modal" class="modal">
-    <div class="modal-content">
+<!-- MODAL TAMBAH -->
 
+<div id="addModal" class="modal">
+    <div class="modal-content">
         <h3>Tambah Kendaraan</h3>
 
-        <form th:action="@{/kendaraan/tambah}" method="post">
-            <label>Plat Nomor</label>
-            <input type="text" name="platNomor" required />
+        <form method="post" th:action="@{/kendaraan/tambah}">
+            <label>Plat Nomor:</label>
+            <input type="text" name="platNomor" required>
 
-            <label>Pemilik</label>
-            <select name="penggunaId" required>
+            <label>Pemilik:</label>
+            <select name="penggunaId">
                 <option th:each="p : ${penggunaList}"
                         th:value="${p.id}"
                         th:text="${p.nama}">
                 </option>
             </select>
 
-            <div style="margin-top: 16px;">
-                <button type="submit" class="btn">Simpan</button>
-                <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
-            </div>
+            <button class="btn" type="submit">Simpan</button>
+            <button class="btn-cancel" type="button" onclick="closeAddModal()">Batal</button>
         </form>
-
-
     </div>
 </div>
 
+<!-- MODAL EDIT -->
 
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <h3>Edit Kendaraan</h3>
+
+        <form method="post" th:action="@{/kendaraan/update}">
+            <input type="hidden" name="id" id="editId">
+
+            <label>Plat Nomor:</label>
+            <input type="text" name="platNomor" id="editPlat" required>
+
+            <label>Pemilik:</label>
+            <select name="penggunaId" id="editPemilik">
+                <option th:each="p : ${penggunaList}"
+                        th:value="${p.id}"
+                        th:text="${p.nama}">
+                </option>
+            </select>
+
+            <button class="btn" type="submit">Simpan</button>
+            <button class="btn-cancel" type="button" onclick="closeEditModal()">Batal</button>
+        </form>
+    </div>
+</div>
+
+<!-- JAVASCRIPT UNTUK MODAL -->
 <script>
-function openModal() { document.getElementById("modal").style.display = "block"; }
-function closeModal() { document.getElementById("modal").style.display = "none"; }
+    function openAddModal() {
+        document.getElementById("addModal").style.display = "block";
+    }
+
+    function closeAddModal() {
+        document.getElementById("addModal").style.display = "none";
+    }
+
+    function openEditModal(id, plat, pemilikId) {
+        document.getElementById("editId").value = id;
+        document.getElementById("editPlat").value = plat;
+
+        let dropdown = document.getElementById("editPemilik");
+        dropdown.value = pemilikId;  // otomatis memilih pemilik yang sesuai
+
+        document.getElementById("editModal").style.display = "block";
+    }
+
+    function closeEditModal() {
+        document.getElementById("editModal").style.display = "none";
+    }
 </script>
 
 </body>

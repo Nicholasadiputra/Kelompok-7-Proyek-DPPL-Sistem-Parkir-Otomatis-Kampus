@@ -77,4 +77,43 @@ public class UiController {
         return "redirect:/kendaraan";
     }
     
+    @PostMapping("/kendaraan/edit")
+        public String editKendaraan(
+                @RequestParam Long id,
+                @RequestParam String platNomor,
+                @RequestParam Long penggunaId
+        ) {
+            Kendaraan k = kendaraanRepo.findById(id).orElse(null);
+            Pengguna pemilik = penggunaRepo.findById(penggunaId).orElse(null);
+
+            if (k != null) {
+                k.setPlatNomor(platNomor);
+                k.setPengguna(pemilik);
+                kendaraanRepo.save(k);
+            }
+
+            return "redirect:/kendaraan";
+        }
+    
+    @PostMapping("/kendaraan/update")
+    public String updateKendaraan(
+            @RequestParam Long id,
+            @RequestParam String platNomor,
+            @RequestParam Long penggunaId
+    ) {
+        Kendaraan k = kendaraanRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Kendaraan tidak ditemukan"));
+
+        k.setPlatNomor(platNomor);
+        k.setStatusAktif(true);
+
+        Pengguna p = penggunaRepo.findById(penggunaId)
+                .orElse(null);
+        k.setPengguna(p);
+
+        kendaraanRepo.save(k);
+
+        return "redirect:/kendaraan";
+    }
+
 }
