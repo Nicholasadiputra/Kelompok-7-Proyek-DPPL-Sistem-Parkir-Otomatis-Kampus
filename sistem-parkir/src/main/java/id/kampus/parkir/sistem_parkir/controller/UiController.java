@@ -10,6 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -45,8 +48,33 @@ public class UiController {
 
     @GetMapping("/kendaraan")
     public String halamanKendaraan(Model model) {
-        List<Kendaraan> list = kendaraanRepo.findAll();
-        model.addAttribute("kendaraanList", list);
-        return "kendaraan"; // templates/kendaraan.html
+        model.addAttribute("kendaraanList", kendaraanRepo.findAll());
+        model.addAttribute("penggunaList", penggunaRepo.findAll()); // untuk dropdown
+        return "kendaraan";
     }
+    
+    @PostMapping("/kendaraan/tambah")
+    public String tambahKendaraan(
+            @RequestParam String platNomor,
+            @RequestParam Long penggunaId
+    ) {
+        Pengguna pemilik = penggunaRepo.findById(penggunaId).orElse(null);
+
+        Kendaraan k = new Kendaraan();
+        k.setPlatNomor(platNomor);
+        k.setStatusAktif(true);
+        k.setPengguna(pemilik);
+
+        kendaraanRepo.save(k);
+
+        // setelah simpan, balik lagi ke halaman kendaraan
+        return "redirect:/kendaraan";
+    }
+
+    @GetMapping("/kendaraan/hapus/{id}")
+    public String hapusKendaraan(@PathVariable Long id) {
+        kendaraanRepo.deleteById(id);
+        return "redirect:/kendaraan";
+    }
+    
 }

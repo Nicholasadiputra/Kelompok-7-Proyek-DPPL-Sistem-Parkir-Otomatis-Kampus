@@ -66,4 +66,22 @@ public class KendaraanController {
         kendaraanRepo.deleteById(id);
         return "Kendaraan berhasil dihapus";
     }
+
+    @PostMapping("/kendaraan/tambah")
+    public String tambahKendaraan(
+            @RequestParam String platNomor,
+            @RequestParam Long penggunaId) {
+
+        Pengguna p = penggunaRepo.findById(penggunaId).orElse(null);
+
+        Kendaraan k = new Kendaraan();
+        k.setPlatNomor(platNomor);
+        k.setStatusAktif(true);
+        k.setPengguna(p);
+
+        kendaraanRepo.save(k);
+
+        return "redirect:/kendaraan";
+    }
+
 }

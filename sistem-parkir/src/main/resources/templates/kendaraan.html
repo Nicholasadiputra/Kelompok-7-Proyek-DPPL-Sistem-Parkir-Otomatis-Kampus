@@ -1,47 +1,93 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Data Kendaraan - Sistem Parkir Kampus</title>
+    <title>Data Kendaraan</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+
 <div class="layout">
-    <aside class="sidebar">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
         <div class="sidebar-title">Parkir Kampus</div>
-        <nav>
-            <a th:href="@{/}" class="nav-item">Dashboard</a>
-            <a th:href="@{/pengguna}" class="nav-item">Pengguna</a>
-            <a th:href="@{/kendaraan}" class="nav-item active">Kendaraan</a>
-        </nav>
-    </aside>
 
-    <main class="main">
-        <header class="header">
+        <a href="/" class="nav-item">Dashboard</a>
+        <a href="/pengguna" class="nav-item">Pengguna</a>
+        <a href="/kendaraan" class="nav-item active">Kendaraan</a>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <div class="header">
             <h1>Data Kendaraan</h1>
-        </header>
+        </div>
 
-        <section class="panel">
+        <button class="btn" onclick="openModal()">Tambah Kendaraan</button>
+
+        <div class="panel">
             <table class="table">
                 <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Plat Nomor</th>
-                    <th>Status</th>
-                    <th>Pemilik</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Plat Nomor</th>
+                        <th>Status</th>
+                        <th>Pemilik</th>
+                        <th>Aksi</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:each="k : ${kendaraanList}">
-                    <td th:text="${k.id}">1</td>
-                    <td th:text="${k.platNomor}">BM 1234 AA</td>
-                    <td th:text="${k.statusAktif} ? 'Aktif' : 'Non-aktif'">Aktif</td>
-                    <td th:text="${k.pengguna != null ? k.pengguna.nama : '-'}">Niko</td>
-                </tr>
+                    <tr th:each="k : ${kendaraanList}">
+                        <td th:text="${k.id}"></td>
+                        <td th:text="${k.platNomor}"></td>
+                        <td th:text="${k.statusAktif} ? 'Aktif' : 'Nonaktif'"></td>
+                        <td th:text="${k.pengguna.nama}"></td>
+                        <td>
+                            <a th:href="@{|/kendaraan/hapus/${k.id}|}" class="btn-delete">Hapus</a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-        </section>
-    </main>
+        </div>
+
+    </div>
 </div>
+
+<!-- Modal Tambah -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+
+        <h3>Tambah Kendaraan</h3>
+
+        <form th:action="@{/kendaraan/tambah}" method="post">
+            <label>Plat Nomor</label>
+            <input type="text" name="platNomor" required />
+
+            <label>Pemilik</label>
+            <select name="penggunaId" required>
+                <option th:each="p : ${penggunaList}"
+                        th:value="${p.id}"
+                        th:text="${p.nama}">
+                </option>
+            </select>
+
+            <div style="margin-top: 16px;">
+                <button type="submit" class="btn">Simpan</button>
+                <button type="button" class="btn-cancel" onclick="closeModal()">Batal</button>
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+
+<script>
+function openModal() { document.getElementById("modal").style.display = "block"; }
+function closeModal() { document.getElementById("modal").style.display = "none"; }
+</script>
+
 </body>
 </html>
