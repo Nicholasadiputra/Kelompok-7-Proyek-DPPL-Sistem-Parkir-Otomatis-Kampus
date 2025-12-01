@@ -154,3 +154,11 @@ body {
     cursor: pointer;
 }
 
+a {
+    text-decoration: none;
+}
+
+.modal-cont ent .btn,
+.modal-content .btn-cancel {
+    margin-top: 10px;
+}

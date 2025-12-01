@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import id.kampus.parkir.sistem_parkir.entity.SlotParkir;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -114,6 +116,26 @@ public class UiController {
         kendaraanRepo.save(k);
 
         return "redirect:/kendaraan";
+    }
+
+    // HALAMAN SLOT PARKIR
+    @GetMapping("/slot")
+    public String halamanSlot(Model model) {
+        model.addAttribute("slotList", slotParkirRepo.findAll());
+        return "slot"; // templates/slot.html
+    }
+
+    // UBAH STATUS SLOT (KOSONG <-> TERISI)
+    @GetMapping("/slot/toggle/{id}")
+    public String toggleSlot(@PathVariable Long id) {
+        SlotParkir slot = slotParkirRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Slot tidak ditemukan"));
+
+        // jika sebelumnya true (tersedia), jadi false (terisi), dan sebaliknya
+        slot.setTersedia(!slot.isTersedia());
+        slotParkirRepo.save(slot);
+
+        return "redirect:/slot";
     }
 
 }

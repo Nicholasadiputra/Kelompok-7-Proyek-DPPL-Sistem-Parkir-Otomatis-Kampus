@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Slot Parkir</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-title">Parkir Kampus</div>
+
+        <a th:href="@{/}" class="nav-item">Dashboard</a>
+        <a th:href="@{/pengguna}" class="nav-item" >Pengguna</a>
+        <a th:href="@{/kendaraan}" class="nav-item" >Kendaraan</a>
+        <a th:href="@{/slot}" class="nav-item active">Slot Parkir</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+        <div class="header">
+            <h1>Data Slot Parkir</h1>
+        </div>
+
+        <div class="panel">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Nomor Slot</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="s : ${slotList}">
+                    <td th:text="${s.id}"></td>
+                    <td th:text="${s.tersedia} ? 'Kosong' : 'Terisi'"></td>
+                    <td>
+                        <a class="btn"
+                           th:href="@{'/slot/toggle/' + ${s.id}}">
+                            <span th:text="${s.tersedia} ? 'Tandai Terisi' : 'Tandai Kosong'"></span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

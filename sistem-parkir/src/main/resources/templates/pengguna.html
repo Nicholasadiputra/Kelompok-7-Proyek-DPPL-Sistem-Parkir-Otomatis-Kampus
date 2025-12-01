@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Data Pengguna</title>
@@ -11,11 +11,13 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-        <h2 class="sidebar-title">Parkir Kampus</h2>
-
+        <div class="sidebar-title">Parkir Kampus</div>
+        <nav>
         <a th:href="@{/}" class="nav-item">Dashboard</a>
         <a th:href="@{/pengguna}" class="nav-item active">Pengguna</a>
         <a th:href="@{/kendaraan}" class="nav-item">Kendaraan</a>
+        <a th:href="@{/slot}" class="nav-item">Slot Parkir</a>
+        </nav>
     </aside>
 
     <!-- Main Content -->
