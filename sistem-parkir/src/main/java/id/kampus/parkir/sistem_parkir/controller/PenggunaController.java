@@ -2,25 +2,37 @@ package id.kampus.parkir.sistem_parkir.controller;
 
 import id.kampus.parkir.sistem_parkir.entity.Pengguna;
 import id.kampus.parkir.sistem_parkir.repository.PenggunaRepo;
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/pengguna")
-@RequiredArgsConstructor
+@Controller
 public class PenggunaController {
 
-    private final PenggunaRepo repo;
+    private final PenggunaRepo penggunaRepo;
 
-    @GetMapping
-    public List<Pengguna> list() {
-        return repo.findAll();
+    public PenggunaController(PenggunaRepo penggunaRepo) {
+        this.penggunaRepo = penggunaRepo;
     }
 
-    @PostMapping
-    public Pengguna create(@RequestBody Pengguna p) {
-        return repo.save(p);
+    @PostMapping("/api/pengguna/tambah")
+    public String tambahPengguna(
+            @RequestParam String nama,
+            @RequestParam String email
+    ) {
+        Pengguna p = new Pengguna();
+        p.setNama(nama);
+        p.setEmail(email);
+        p.setStatusAktif(true);
+
+        penggunaRepo.save(p);
+        return "redirect:/pengguna";
+    }
+
+    @GetMapping("/api/pengguna/hapus/{id}")
+    public String hapusPengguna(@PathVariable Long id) {
+        penggunaRepo.deleteById(id);
+        return "redirect:/pengguna";
     }
 }
+

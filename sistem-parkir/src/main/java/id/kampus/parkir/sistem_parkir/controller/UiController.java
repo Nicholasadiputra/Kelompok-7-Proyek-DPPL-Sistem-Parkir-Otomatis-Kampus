@@ -39,9 +39,8 @@ public class UiController {
 
     @GetMapping("/pengguna")
     public String halamanPengguna(Model model) {
-        List<Pengguna> list = penggunaRepo.findAll();
-        model.addAttribute("penggunaList", list);
-        return "pengguna"; // templates/pengguna.html
+        model.addAttribute("penggunaList", penggunaRepo.findAll());
+        return "pengguna";
     }
 
     @GetMapping("/kendaraan")
