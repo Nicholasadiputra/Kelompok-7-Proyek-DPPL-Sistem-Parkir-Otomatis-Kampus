@@ -4,6 +4,7 @@ import id.kampus.parkir.sistem_parkir.dto.RingkasanDTO;
 import id.kampus.parkir.sistem_parkir.entity.Pengguna;
 import id.kampus.parkir.sistem_parkir.entity.Kendaraan;
 import id.kampus.parkir.sistem_parkir.repository.PenggunaRepo;
+import id.kampus.parkir.sistem_parkir.repository.PermohonanIzinParkirRepo;
 import id.kampus.parkir.sistem_parkir.repository.KendaraanRepo;
 import id.kampus.parkir.sistem_parkir.repository.SlotParkirRepo;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import id.kampus.parkir.sistem_parkir.entity.SlotParkir;
-import org.springframework.web.bind.annotation.PathVariable;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class UiController {
     private final PenggunaRepo penggunaRepo;
     private final KendaraanRepo kendaraanRepo;
     private final SlotParkirRepo slotParkirRepo;
-
+    private final PermohonanIzinParkirRepo izinRepo;
     @GetMapping("/")
     public String dashboard(Model model) {
         long totalPengguna = penggunaRepo.count();
@@ -136,6 +134,14 @@ public class UiController {
         slotParkirRepo.save(slot);
 
         return "redirect:/slot";
+    }
+
+    @GetMapping("/izin")
+    public String halamanIzin(Model model) {
+        model.addAttribute("penggunaList", penggunaRepo.findAll());
+        model.addAttribute("kendaraanList", kendaraanRepo.findAll());
+        model.addAttribute("izinList", izinRepo.findAll());
+        return "izin";
     }
 
 }

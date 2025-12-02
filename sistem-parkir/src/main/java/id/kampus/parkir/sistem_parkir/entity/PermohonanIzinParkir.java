@@ -4,19 +4,22 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
 
-@Data
 @Entity
+@Data
 public class PermohonanIzinParkir {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate tanggal;
+    private String alasan;
 
-    private boolean statusAktif;
+    private boolean disetujui;
 
     @ManyToOne
-    @JoinColumn(name = "pengguna_id")
     private Pengguna pengguna;
+
+    @ManyToOne
+    private Kendaraan kendaraan;
 }
+

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Izin Parkir</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+<div class="layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-title">Parkir Kampus</div>
+
+        <nav>
+            <a th:href="@{/}" class="nav-item">Dashboard</a>
+            <a th:href="@{/pengguna}" class="nav-item">Pengguna</a>
+            <a th:href="@{/kendaraan}" class="nav-item">Kendaraan</a>
+            <a th:href="@{/slot}" class="nav-item">Slot Parkir</a>
+            <a th:href="@{/izin}" class="nav-item active">Izin Parkir</a>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+
+        <header class="header">
+            <h1>Izin Parkir</h1>
+        </header>
+
+        <!-- ================= FORM AJUKAN SATU KALI ================= -->
+        <div class="panel">
+            <form th:action="@{/izin/ajukan}" method="post"
+                  style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+
+                <label>Pengguna:</label>
+                <select name="penggunaId">
+                    <option th:each="p : ${penggunaList}"
+                            th:value="${p.id}"
+                            th:text="${p.nama}">
+                    </option>
+                </select>
+
+                <label>Kendaraan:</label>
+                <select name="kendaraanId">
+                    <option th:each="k : ${kendaraanList}"
+                            th:value="${k.id}"
+                            th:text="${k.platNomor}">
+                    </option>
+                </select>
+
+                <label>Alasan:</label>
+                <input type="text" name="alasan" placeholder="misal: parkir malam">
+
+                <button type="submit" class="btn">Ajukan</button>
+            </form>
+        </div>
+
+        <!-- ================= TABEL IZIN ================= -->
+        <div class="panel">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pengguna</th>
+                    <th>Kendaraan</th>
+                    <th>Alasan</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="i : ${izinList}">
+                    <td th:text="${i.id}"></td>
+                    <td th:text="${i.pengguna.nama}"></td>
+                    <td th:text="${i.kendaraan.platNomor}"></td>
+                    <td th:text="${i.alasan}"></td>
+
+                    <td th:text="${i.disetujui ? 'Disetujui' : 'Menunggu'}"></td>
+
+                    <td>
+                        <a th:href="@{'/izin/setuju/' + ${i.id}}"
+                           class="btn"
+                           th:if="${!i.disetujui}">
+                            Setujui
+                        </a>
+
+                        <span th:if="${i.disetujui}" style="color:green; font-weight:600;">
+                            ✔ Disetujui
+                        </span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+</div>
+</body>
+
+</html>
